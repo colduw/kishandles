@@ -3,10 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
-	"main/database"
 	"net/http"
 	"os"
 	"time"
+
+	"main/database"
 
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/acme/autocert"

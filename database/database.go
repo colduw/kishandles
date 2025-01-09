@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var db *gorm.DB
-
 const maxRetry = 60 // 60 * 5s = 300s (5m)
+
+var db *gorm.DB
 
 func Db() *gorm.DB {
 	if db == nil {
@@ -28,11 +28,10 @@ func Db() *gorm.DB {
 		)
 		var err error
 
-		for i := 0; i < maxRetry; i++ {
+		for range maxRetry {
 			db, err = gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{
 				Logger: lInterface,
 			})
-
 			if err != nil {
 				time.Sleep(5 * time.Second)
 				continue
