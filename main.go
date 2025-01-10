@@ -21,12 +21,8 @@ func main() {
 
 	database.SetupDatabase()
 
-	if bHMErr := database.Db().AutoMigrate(&database.BskyHandle{}); bHMErr != nil {
-		panic(bHMErr)
-	}
-
-	if dHMErr := database.Db().AutoMigrate(&database.DiscordHandle{}); dHMErr != nil {
-		panic(dHMErr)
+	if migrationErr := database.Db().AutoMigrate(&database.CHandle{}); migrationErr != nil {
+		panic(migrationErr)
 	}
 
 	manager := autocert.Manager{
@@ -81,8 +77,8 @@ func getProtogen(w http.ResponseWriter, r *http.Request) {
 
 	username := r.PathValue("username")
 
-	var bHandle database.BskyHandle
-	dbErr := database.Db().Model(&database.BskyHandle{}).Where("handle = ?", username).First(&bHandle).Error
+	var bHandle database.CHandle
+	dbErr := database.Db().Model(&database.CHandle{}).Where("handle = ?", username).First(&bHandle).Error
 
 	if errors.Is(dbErr, gorm.ErrRecordNotFound) {
 		http.Error(w, "Handle not found", http.StatusNotFound)
@@ -102,16 +98,16 @@ func getDiscord(w http.ResponseWriter, r *http.Request) {
 
 	username := r.PathValue("username")
 
-	var dHandle database.DiscordHandle
-	dbErr := database.Db().Model(&database.DiscordHandle{}).Where("user_name = ?", username).First(&dHandle).Error
+	var dHandle database.CHandle
+	dbErr := database.Db().Model(&database.CHandle{}).Where("handle = ?", username).First(&dHandle).Error
 
 	if errors.Is(dbErr, gorm.ErrRecordNotFound) {
-		http.Error(w, "Username not found", http.StatusNotFound)
+		http.Error(w, "Handle not found", http.StatusNotFound)
 		return
 	}
 
 	if dbErr != nil {
-		http.Error(w, "Failed to get username", http.StatusInternalServerError)
+		http.Error(w, "Failed to get handle", http.StatusInternalServerError)
 		return
 	}
 

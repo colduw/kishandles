@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	if loadErr := godotenv.Load("../../../.env"); loadErr != nil {
+	if loadErr := godotenv.Load("../../.env"); loadErr != nil {
 		panic(loadErr)
 	}
 
@@ -15,7 +15,7 @@ func main() {
 
 	const handleToDelete = "handle-goes-here"
 
-	if deleteErr := database.Db().Unscoped().Delete(&database.BskyHandle{}, "handle = ?", handleToDelete).Error; deleteErr != nil {
+	if deleteErr := database.Db().Unscoped().Delete(&database.CHandle{}, "handle = ?", handleToDelete).Error; deleteErr != nil {
 		panic(deleteErr)
 	}
 }

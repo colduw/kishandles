@@ -7,18 +7,19 @@ import (
 )
 
 func main() {
-	if loadErr := godotenv.Load("../../../.env"); loadErr != nil {
+	if loadErr := godotenv.Load("../../.env"); loadErr != nil {
 		panic(loadErr)
 	}
 
 	database.SetupDatabase()
 
-	bData := database.BskyHandle{
+	cData := database.CHandle{
 		Handle: "handle-goes-here",
 		DID:    "did:plc:stuff",
+		DHCode: "dh=stuff",
 	}
 
-	if createErr := database.Db().Model(&database.BskyHandle{}).Create(&bData).Error; createErr != nil {
+	if createErr := database.Db().Model(&database.CHandle{}).Create(&cData).Error; createErr != nil {
 		panic(createErr)
 	}
 }
